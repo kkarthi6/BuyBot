@@ -30,9 +30,6 @@ const command: GluegunCommand = {
     const expirationYear = await input('expirationYear', prompt, print)
     const cvv = await input('cvv', prompt, print)
     const targetLink = await input('targetLink', prompt, print)
-    const walmartLink = await input('walmartLink', prompt, print)
-    const bestBuyLink = await input('bestBuyLink', prompt, print)
-    const directLink = await input('directLink', prompt, print)
 
 
     print.info(`
@@ -54,19 +51,12 @@ const command: GluegunCommand = {
       expirationYear,
       cvv,
       cronSchedule,
-      targetLink,
-      walmartLink,
-      bestBuyLink,
-      directLink
+      targetLink
     }
     fs.writeFileSync('config.json', JSON.stringify(config, null, 4))
 
-    const isScrapeTarget = await toolbox.prompt.confirm(
-      'Do you want to scrape Target?'
-    )
-    let targetEmailPassword: { [key: string]: string } = {}
-    if (isScrapeTarget) {
-      targetEmailPassword = await inputTargetEmailPassword(prompt, print, email)
+    const targetEmailPassword = await inputTargetEmailPassword(prompt, print, email)
+    if (targetEmailPassword) {
       config.targetEmail = targetEmailPassword.email
       config.targetPassword = targetEmailPassword.password
     }
